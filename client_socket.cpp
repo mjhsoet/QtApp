@@ -34,17 +34,20 @@ void Client_socket::Test(QString ipAddr)
         qDebug() << "Error: " << socket->errorString();
     }
 
-    if(socket->ConnectedState == true)
+    while(!socket->waitForDisconnected(2000))
     {
-        while(!socket->waitForDisconnected(2000))
-        {
-            updateJson();
-            qDebug() << lastjson;
-            QJsonDocument doc = QJsonDocument::fromJson(lastjson);
-            QJsonObject test = doc.object();
-            QJsonValue value = test.value(QString("temperature"));
-            qDebug() << value.toDouble();
-        }
+          updateJson();
+          qDebug() << lastjson;
+          QJsonDocument doc = QJsonDocument::fromJson(lastjson);
+          QJsonObject test = doc.object();
+          QJsonValue value = test.value(QString("temperature"));
+          QJsonValue value2 = test.value(QString("humidity"));
+          QJsonValue value3 = test.value(QString("height"));
+          QJsonValue value4 = test.value(QString("airpresure"));
+          qDebug() << value.toDouble();
+          qDebug() << value2.toDouble();
+          qDebug() << value3.toDouble();
+          qDebug() << value4.toDouble();
     }
 
 }
