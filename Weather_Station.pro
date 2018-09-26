@@ -3,8 +3,9 @@
 # Project created by QtCreator 2018-09-10T15:44:42
 #
 #-------------------------------------------------
-
+QT       += core
 QT       += core gui widgets
+QT       += network
 
 TARGET = Weather_Station
 TEMPLATE = app
@@ -32,7 +33,8 @@ HEADERS += \
     client_socket.h
 
 FORMS += \
-        weather_station.ui
+        weather_station.ui \
+    ipoutputwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

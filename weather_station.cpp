@@ -1,5 +1,6 @@
 #include "weather_station.h"
 #include "ui_weather_station.h"
+#include "client_socket.h"
 
 Weather_Station::Weather_Station(QWidget *parent) :
     QWidget(parent),
@@ -23,6 +24,6 @@ void Weather_Station::on_Manual_refresh_clicked()
 
 void Weather_Station::on_Ipsend_clicked()
 {
-    ipAddr = ui->ipaddress->text();
-    ui->Temperature_window->setText(ipAddr);
+    Client_socket mTest;
+    mTest.Test(ui->ipaddress->text());
 }
