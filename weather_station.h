@@ -1,10 +1,16 @@
 #ifndef WEATHER_STATION_H
 #define WEATHER_STATION_H
 
+#include "client_socket.h"
+
 #include <QFile>
 #include <QTextStream>
 #include <QWidget>
 #include <string>
+#include <QObject>
+#include <QDebug>
+#include <QTcpSocket>
+#include <QAbstractSocket>
 
 namespace Ui {
 class Weather_Station;
@@ -18,14 +24,22 @@ public:
     explicit Weather_Station(QWidget *parent = nullptr);
     ~Weather_Station();
 
+public:
+    void refreshData();
+
 private slots:
     void on_Manual_refresh_clicked();
 
     void on_Ipsend_clicked();
 
 private:
+    QTcpSocket *socket;
     Ui::Weather_Station *ui;
-    QString ipAddr;
+    Client_socket mTest;
+
+private:
+    double temperature = 1.1;
+    double humidity = 1.2;
 };
 
 #endif // WEATHER_STATION_H

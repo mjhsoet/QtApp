@@ -33,8 +33,7 @@ HEADERS += \
     client_socket.h
 
 FORMS += \
-        weather_station.ui \
-    ipoutputwindow.ui
+        weather_station.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

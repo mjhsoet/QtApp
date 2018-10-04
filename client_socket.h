@@ -17,12 +17,13 @@ public:
 public:
     void Test(QString ipAddr);
     void updateJson();
-
+    void sendData();
+    bool connected();
+    double returnValues(double valueDef);
 private:
     QTcpSocket *socket;
     QByteArray lastjson;
-    QString ipAdress;
-
+    double temperature, humidity;
 };
 
 #endif // CLIENT_SOCKET_H
