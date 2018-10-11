@@ -7,6 +7,11 @@
 #include <QAbstractSocket>
 #include "ui_weather_station.h"
 
+typedef enum {
+    temperature,
+    humidity
+} returnValTypeDef;
+
 class Client_socket : public QObject
 {
 
@@ -19,11 +24,11 @@ public:
     void updateJson();
     void sendData();
     bool connected();
-    double returnValues(double valueDef);
+    double returnValues(returnValTypeDef type);
 private:
     QTcpSocket *socket;
-    QByteArray lastjson;
-    double temperature, humidity;
+    QByteArray lastjson, newjson;
+    double temperatureVal, humidityVal;
 };
 
 #endif // CLIENT_SOCKET_H

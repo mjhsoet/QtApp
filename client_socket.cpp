@@ -32,21 +32,26 @@ void Client_socket::Test(QString ipAddr)
     {
         qDebug() << "Error: " << socket->errorString();
     }
+    else
+    {
+        qDebug() << "Connection succesfully";
+    }
 }
 
 void Client_socket::sendData(){
     updateJson();
+    qDebug() << newjson;
     qDebug() << lastjson;
     QJsonDocument doc = QJsonDocument::fromJson(lastjson);
     QJsonObject test = doc.object();
     QJsonValue value = test.value(QString("temperature"));
     QJsonValue value2 = test.value(QString("humidity"));
-    QJsonValue value3 = test.value(QString("height"));
-    QJsonValue value4 = test.value(QString("airpresure"));
-    this->temperature = value.toDouble();
-    this->humidity = value2.toDouble();
-    qDebug() << value3.toDouble();
-    qDebug() << value4.toDouble();
+    //QJsonValue value3 = test.value(QString("height"));
+    //QJsonValue value4 = test.value(QString("airpresure"));
+    this->temperatureVal = value.toDouble();
+    this->humidityVal = value2.toDouble();
+    //qDebug() << value3.toDouble();
+    //qDebug() << value4.toDouble();
 }
 
 bool Client_socket::connected(){
@@ -58,25 +63,32 @@ bool Client_socket::connected(){
     }
 }
 
-double Client_socket::returnValues(double valueDef){
-    if(valueDef == 1.1){
-        return this->temperature;
+double Client_socket::returnValues(returnValTypeDef type){
+    if(type == temperature){
+        return this->temperatureVal;
     }
-    else if(valueDef == 1.2){
-        return this->humidity;
+    else if(type == humidity){
+        return this->humidityVal;
     }
-
-    return 0.0;
+    else{
+      return 0.0;
+    }
 }
 
 void Client_socket::updateJson()
 {
     qDebug() << "Reading...";
 
-    if(socket->waitForReadyRead(2000))
-    {
+    newjson = 0;
 
-        lastjson = QByteArray(socket->readAll());
+    if(socket->canReadLine())
+    {
+        newjson = QByteArray(socket->readAll());
+
+        if(socket->state() == QAbstractSocket::ConnectedState){
+            lastjson = 0;
+            lastjson = newjson;
+        }
     }
 }
 

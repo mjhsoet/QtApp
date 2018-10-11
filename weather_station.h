@@ -11,6 +11,10 @@
 #include <QDebug>
 #include <QTcpSocket>
 #include <QAbstractSocket>
+#include <QTimer>
+
+
+
 
 namespace Ui {
 class Weather_Station;
@@ -24,7 +28,7 @@ public:
     explicit Weather_Station(QWidget *parent = nullptr);
     ~Weather_Station();
 
-public:
+public slots:
     void refreshData();
 
 private slots:
@@ -38,8 +42,9 @@ private:
     Client_socket mTest;
 
 private:
-    double temperature = 1.1;
-    double humidity = 1.2;
+    //double temperature = 1.1;
+    //double humidity = 1.2;
+    QTimer *timer;
 };
 
 #endif // WEATHER_STATION_H
