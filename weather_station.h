@@ -32,8 +32,6 @@ public slots:
     void refreshData();
 
 private slots:
-    void on_Manual_refresh_clicked();
-
     void on_Ipsend_clicked();
 
 private:
