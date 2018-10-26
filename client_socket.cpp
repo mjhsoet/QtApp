@@ -5,12 +5,11 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QJsonValueRef>
 
 
 Client_socket::Client_socket(QObject *parent) : QObject(parent)
 {
-
+    socket = new QTcpSocket(this);
 }
 
 Client_socket::~Client_socket()
@@ -21,9 +20,8 @@ Client_socket::~Client_socket()
     }
 }
 
-void Client_socket::Test(QString ipAddr)
+void Client_socket::connectToIP(QString ipAddr)
 {
-    socket = new QTcpSocket(this);
 
     qDebug() << "Connecting to server...";
 
@@ -35,70 +33,71 @@ void Client_socket::Test(QString ipAddr)
     }
     else
     {
-        qDebug() << "Connection succesfully";
+        qDebug() << "Connection succesfull!";
     }
 }
 
-void Client_socket::sendData(){
-    updateJson();
-    qDebug() << newjson;
-    qDebug() << lastjson;
-    doc = QJsonDocument::fromJson(lastjson);
-    test = doc.object();
-    QJsonValue value = test.value(QString("temperature"));
-    QJsonValue value2 = test.value(QString("humidity"));
-    QJsonValue value3 = test.value(QString("pressure"));
-    this->temperatureVal = value.toDouble();
-    this->humidityVal = value2.toDouble();
-    this->pressureVal = value3.toDouble();
+void Client_socket::receiveData()
+{
+    int nIndex;
+    QByteArray nIndexArray;
+    QByteArray newjson;
+    QJsonObject jsonobject;
+
+    qDebug() << "Reading...";
+
+    if(socket->canReadLine())
+    {
+        newjson = QByteArray(socket->readAll());
+
+        if(socket->state() == QAbstractSocket::ConnectedState)
+        {
+            this->jsonString.clear();
+            this->jsonString = newjson;
+        }
+    }
+
+
+    nIndex = jsonString.indexOf("\n");
+    nIndexArray = jsonString.left(nIndex);
+
+    qDebug() << nIndexArray;
+
+    jsonobject = QJsonDocument::fromJson(nIndexArray).object();
+
+    this->valueTemperature = jsonobject.value(QString("temperature")).toDouble();
+    this->valueHumidity = jsonobject.value(QString("humidity")).toDouble();
+    this->valuePressure = jsonobject.value(QString("pressure")).toDouble();
 
 }
 
-bool Client_socket::connected(){
-    if(socket->state() == QAbstractSocket::ConnectedState){
+bool Client_socket::isConnected(){
+    if(socket->state() == QAbstractSocket::ConnectedState)
+    {
         return 1;
     }
-    else{
+    else
+    {
         return 0;
     }
 }
 
-double Client_socket::returnValues(returnValTypeDef type){
-    if(type == temperature){
-        return this->temperatureVal;
+double Client_socket::returnDataValues(returnValueState valueState){
+    if(valueState == stateTemperature)
+    {
+        return this->valueTemperature;
     }
-    else if(type == humidity){
-        return this->humidityVal;
+    else if(valueState == stateHumidity)
+    {
+        return this->valueHumidity;
     }
-    else if(type == pressure){
-        return this->pressureVal;
+    else if(valueState == statePressure)
+    {
+        return this->valuePressure;
     }
     else
     {
       return 0.0;
-    }
-}
-
-void Client_socket::updateJson()
-{
-
-    qDebug() << "Reading...";
-
-    newjson = 0;
-
-
-
-    if(socket->canReadLine())
-    {
-        socket->setReadBufferSize(55);
-        socket->readBufferSize();
-
-        newjson = QByteArray(socket->readAll());
-
-        if(socket->state() == QAbstractSocket::ConnectedState){
-            lastjson = 0;
-            lastjson = newjson;
-        }
     }
 }
 

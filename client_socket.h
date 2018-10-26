@@ -11,11 +11,12 @@
 #include <QJsonObject>
 #include <QJsonValue>
 
-typedef enum {
-    temperature,
-    humidity,
-    pressure
-} returnValTypeDef;
+typedef enum
+{
+    stateTemperature,
+    stateHumidity,
+    statePressure
+} returnValueState;
 
 class Client_socket : public QObject
 {
@@ -25,17 +26,15 @@ public:
     virtual ~Client_socket();
 
 public:
-    void Test(QString ipAddr);
-    void updateJson();
-    void sendData();
-    bool connected();
-    double returnValues(returnValTypeDef type);
+    void connectToIP(QString ipAddr);
+    void receiveData();
+    bool isConnected();
+    double returnDataValues(returnValueState);
+
 private:
     QTcpSocket *socket;
-    QByteArray lastjson, newjson;
-    double temperatureVal, humidityVal, pressureVal;
-    QJsonDocument doc;
-    QJsonObject test;
+    QByteArray jsonString;
+    double valueTemperature, valueHumidity, valuePressure;
 };
 
 #endif // CLIENT_SOCKET_H

@@ -37,11 +37,9 @@ private slots:
 private:
     QTcpSocket *socket;
     Ui::Weather_Station *ui;
-    Client_socket mTest;
+    Client_socket cSocket;
 
 private:
-    //double temperature = 1.1;
-    //double humidity = 1.2;
     QTimer *timer;
 };
 
