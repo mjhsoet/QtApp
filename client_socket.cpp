@@ -7,12 +7,12 @@
 #include <QJsonValue>
 
 
-Client_socket::Client_socket(QObject *parent) : QObject(parent)
+Client_socket::Client_socket(QObject *parent) : QObject(parent)         // Constructor. Creation of a new socket.
 {
     socket = new QTcpSocket(this);
 }
 
-Client_socket::~Client_socket()
+Client_socket::~Client_socket()         // Destructor. Deletion of the existing socket.
 {
     if(socket != nullptr)
     {
@@ -20,7 +20,7 @@ Client_socket::~Client_socket()
     }
 }
 
-void Client_socket::connectToIP(QString ipAddr)
+void Client_socket::connectToIP(QString ipAddr)         // Connection to entered IP address in the line edit box.
 {
 
     qDebug() << "Connecting to server...";
@@ -37,7 +37,7 @@ void Client_socket::connectToIP(QString ipAddr)
     }
 }
 
-void Client_socket::receiveData()
+void Client_socket::receiveData()           // Filters and reads data coming in from server.
 {
     int nIndex;
     QByteArray nIndexArray;
@@ -69,12 +69,10 @@ void Client_socket::receiveData()
     this->valueHumidity = jsonobject.value(QString("humidity")).toDouble();
     this->valuePressure = jsonobject.value(QString("pressure")).toDouble();
 
-
-
-
 }
 
-bool Client_socket::isConnected(){
+bool Client_socket::isConnected()           // Boolean function that returns '1' when the socket is connected.
+{
     if(socket->state() == QAbstractSocket::ConnectedState)
     {
         return 1;
@@ -85,7 +83,8 @@ bool Client_socket::isConnected(){
     }
 }
 
-double Client_socket::returnDataValues(returnValueState valueState){
+double Client_socket::returnDataValues(returnValueState valueState)         // Function that returns a certain value, dependent on the enum state.
+{
     if(valueState == stateTemperature)
     {
         return this->valueTemperature;
