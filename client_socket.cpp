@@ -69,6 +69,9 @@ void Client_socket::receiveData()
     this->valueHumidity = jsonobject.value(QString("humidity")).toDouble();
     this->valuePressure = jsonobject.value(QString("pressure")).toDouble();
 
+
+
+
 }
 
 bool Client_socket::isConnected(){

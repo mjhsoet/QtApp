@@ -36,14 +36,27 @@ void Weather_Station::on_Ipsend_clicked()
 
 void Weather_Station::refreshData()
 {
-    cSocket.receiveData();
 
-    ui->Temperature_window->setText(QString::number(cSocket.returnDataValues(stateTemperature)));
-    ui->Humidity_window->setText(QString::number(cSocket.returnDataValues(stateHumidity)));
-    ui->Pressure_window->setText(QString::number(cSocket.returnDataValues(statePressure)));
+    if(cSocket.isConnected() == 1)
+    {
+        cSocket.receiveData();
 
-    qDebug() <<  cSocket.returnDataValues(stateTemperature);
-    qDebug() <<  cSocket.returnDataValues(stateHumidity);
-    qDebug() << cSocket.returnDataValues(statePressure);
+        ui->Temperature_window->setText(QString::number(cSocket.returnDataValues(stateTemperature)));
+        ui->Humidity_window->setText(QString::number(cSocket.returnDataValues(stateHumidity)));
+        ui->Pressure_window->setText(QString::number(cSocket.returnDataValues(statePressure)));
+
+        qDebug() <<  cSocket.returnDataValues(stateTemperature);
+        qDebug() <<  cSocket.returnDataValues(stateHumidity);
+        qDebug() << cSocket.returnDataValues(statePressure);
+    }
+    else
+    {
+        ui->Connection_window->append("Looking for connection...");
+        qDebug() << "Looking for connection...";
+
+        timer->stop();
+        Weather_Station::on_Ipsend_clicked();
+    }
+
 }
 
