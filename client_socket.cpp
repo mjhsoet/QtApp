@@ -6,6 +6,8 @@
 #include <QJsonObject>
 #include <QJsonValue>
 
+#include <cmath>
+
 
 Client_socket::Client_socket(QObject *parent) : QObject(parent)         // Constructor. Creation of a new socket.
 {
@@ -46,9 +48,9 @@ void Client_socket::receiveData()           // Filters and reads data coming in 
 
     qDebug() << "Reading...";
 
-    if(socket->canReadLine())
+    if(socket->canReadLine())       // Statement that returns true if a line of data can be read.
     {
-        newjson = QByteArray(socket->readAll());
+        newjson = QByteArray(socket->readAll());        // Stores all remaining data that can be read in a QByteArray, which is an array of bytes.
 
         if(socket->state() == QAbstractSocket::ConnectedState)
         {
@@ -67,7 +69,7 @@ void Client_socket::receiveData()           // Filters and reads data coming in 
 
     this->valueTemperature = jsonobject.value(QString("temperature")).toDouble();
     this->valueHumidity = jsonobject.value(QString("humidity")).toDouble();
-    this->valuePressure = jsonobject.value(QString("pressure")).toDouble();
+    this->valuePressure = std::round(jsonobject.value(QString("pressure")).toDouble());
 
 }
 
@@ -95,7 +97,7 @@ double Client_socket::returnDataValues(returnValueState valueState)         // F
     }
     else if(valueState == statePressure)
     {
-        return this->valuePressure;
+        return this->valuePressure / 100;
     }
     else
     {

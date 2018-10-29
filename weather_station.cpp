@@ -2,6 +2,7 @@
 #include "ui_weather_station.h"
 #include "client_socket.h"
 
+
 Weather_Station::Weather_Station(QWidget *parent) : QWidget(parent), ui(new Ui::Weather_Station)            // Constructor. Setup UI, sets font sizes and creates a new timer.
 {
     ui->setupUi(this);
@@ -55,7 +56,7 @@ void Weather_Station::refreshData()         // Calls a function from 'client_soc
         qDebug() << "Looking for connection...";
 
         timer->stop();
-        Weather_Station::on_Ipsend_clicked();
+        this->on_Ipsend_clicked();
     }
 
 }
